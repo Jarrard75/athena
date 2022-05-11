@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import static com.athena.security.ApplicationUserRole.*;
+
 @Configuration
 @EnableWebSecurity
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -28,8 +30,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests()
-                .antMatchers("/","index","/css/*","/js/*")
-                .permitAll()
+                .antMatchers("/","index","/css/*","/js/*").permitAll()
+                .antMatchers("/api/v1/**").hasRole(ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -39,12 +41,19 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
-        UserDetails jarrardUser = User.builder()
-                .username("jarrard75")
-                .password(passwordEncoder.encode("Athen5W4rrior"))
-                .roles("USER") //ROLE_USER
+        UserDetails admin = User.builder()
+                .username("user")
+                .password(passwordEncoder.encode("user"))
+                .roles(USER.name()) //ROLE_USER
                 .build();
 
-        return new InMemoryUserDetailsManager(jarrardUser);
+        UserDetails user = User.builder()
+                .username("admin")
+                .password(passwordEncoder.encode("admin"))
+                .roles(ADMIN.name()) //ROLE_USER
+                .build();
+
+
+        return new InMemoryUserDetailsManager(admin, user);
     }
 }
