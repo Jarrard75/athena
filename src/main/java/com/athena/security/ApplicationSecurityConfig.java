@@ -35,10 +35,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeHttpRequests()
                 .antMatchers("index","/css/*","/js/*").permitAll()
                 .antMatchers("/api/v1/**").hasRole(USER.name())
-                .antMatchers(HttpMethod.GET, "/admin/**").hasAuthority(ADMINISTRATOR_READ.getPermission())
-                .antMatchers(HttpMethod.POST, "/admin/**").hasAuthority(ADMINISTRATOR_WRITE.getPermission())
-                .antMatchers(HttpMethod.PUT, "/admin/**").hasAuthority(ADMINISTRATOR_WRITE.getPermission())
-                .antMatchers(HttpMethod.DELETE, "/admin/**").hasAuthority(ADMINISTRATOR_WRITE.getPermission())
+//                .antMatchers(HttpMethod.GET, "/admin/**").hasAuthority(ADMINISTRATOR_READ.getPermission())
+//                .antMatchers(HttpMethod.POST, "/admin/**").hasAuthority(ADMINISTRATOR_WRITE.getPermission())
+//                .antMatchers(HttpMethod.PUT, "/admin/**").hasAuthority(ADMINISTRATOR_WRITE.getPermission())
+//                .antMatchers(HttpMethod.DELETE, "/admin/**").hasAuthority(ADMINISTRATOR_WRITE.getPermission())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -48,17 +48,17 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
-        UserDetails admin = User.builder()
+        UserDetails user = User.builder()
                 .username("user")
                 .password(passwordEncoder.encode("user"))
 //                .roles(USER.name()) //ROLE_USER
                 .authorities(USER.getGrantedAuthorities())
                 .build();
 
-        UserDetails user = User.builder()
+        UserDetails admin = User.builder()
                 .username("admin")
                 .password(passwordEncoder.encode("admin"))
-//                .roles(ADMIN.name()) //ROLE_USER
+//                .roles(ADMIN.name()) //ROLE_ADMIN
                 .authorities(ADMIN.getGrantedAuthorities())
                 .build();
 
