@@ -16,6 +16,11 @@ public class User {
         this.userName = userName;
     }
 
+    public User(String userName) {
+        this.userId = (int)Math.floor(Math.random()*100);
+        this.userName = userName;
+    }
+
     public Integer getUserId() {
         return userId;
     }

@@ -1,15 +1,12 @@
 package com.athena.user;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     private static final List<User> USERS = Arrays.asList(
@@ -19,11 +16,8 @@ public class UserController {
     );
 
     @GetMapping(path = "{userId}")
-    public User getUser(@PathVariable("userId") Integer userId){
-        return USERS.stream()
-                .filter(user -> userId.equals(user.getUserId()))
-                .findFirst()
-                .orElseThrow(()-> new IllegalStateException("User "+userId + " does not exist."));
+    public List<User> getAllUsers(@PathVariable("userId") Integer userId){
+        return USERS;
     }
 
 }
