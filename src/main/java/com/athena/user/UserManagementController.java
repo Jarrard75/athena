@@ -5,7 +5,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -28,20 +27,35 @@ public class UserManagementController {
     @PreAuthorize("hasAuthority('administrator:write')")
     public void registerNewUser(@RequestBody User user){
         USERS.add(new User(user.getUserName()));
-        System.out.println(user);
     }
 
     @DeleteMapping(path = "{userId}")
     @PreAuthorize("hasAuthority('administrator:write')")
     public void removeUser(@PathVariable("userId") Integer userId){
-        USERS.remove((int)userId);
-        System.out.println(USERS);
+
+        User searchUser = USERS.stream()
+                .filter(someUser -> userId.equals(someUser.getUserId()))
+                .findFirst()
+                .orElse(null);
+
+        if(searchUser != null){
+            USERS.remove(USERS.indexOf(searchUser));
+        }
+
     }
 
     @PutMapping(path = "{userId}")
     @PreAuthorize("hasAuthority('administrator:write')")
     public void updateStudent(@PathVariable("userId")Integer userId, @RequestBody User user){
-        USERS.set(userId, new User(user.getUserName()));
-    }
 
+        User searchUser = USERS.stream()
+                .filter(someUser -> userId.equals(someUser.getUserId()))
+                .findFirst()
+                .orElse(null);
+
+        if(searchUser != null){
+            User newUser = new User(userId,user.getUserName());
+            USERS.set(USERS.indexOf(searchUser), newUser);
+        }
+    }
 }
