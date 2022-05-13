@@ -31,18 +31,16 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable() //TODO: Will enable this later
+                .csrf().disable() //enable csrf when completed with client
                 .authorizeHttpRequests()
-                .antMatchers("index","/css/*","/js/*").permitAll()
+                .antMatchers("index", "/login","/css/*","/js/*").permitAll()
                 .antMatchers("/api/v1/**").hasRole(USER.name())
-//                .antMatchers(HttpMethod.GET, "/admin/**").hasAuthority(ADMINISTRATOR_READ.getPermission())
-//                .antMatchers(HttpMethod.POST, "/admin/**").hasAuthority(ADMINISTRATOR_WRITE.getPermission())
-//                .antMatchers(HttpMethod.PUT, "/admin/**").hasAuthority(ADMINISTRATOR_WRITE.getPermission())
-//                .antMatchers(HttpMethod.DELETE, "/admin/**").hasAuthority(ADMINISTRATOR_WRITE.getPermission())
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+                .formLogin()//;
+                .loginPage("/login")
+                .defaultSuccessUrl("/home", true);
     }
 
     @Override
