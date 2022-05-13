@@ -33,14 +33,27 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable() //enable csrf when completed with client
                 .authorizeHttpRequests()
-                .antMatchers("index", "/login","/css/*","/js/*").permitAll()
-                .antMatchers("/api/v1/**").hasRole(USER.name())
-                .anyRequest()
-                .authenticated()
+                    .antMatchers("index", "/login","/css/*","/js/*").permitAll()
+                    .antMatchers("/api/v1/**").hasRole(USER.name())
+                    .anyRequest()
+                    .authenticated()
                 .and()
                 .formLogin()//;
-                .loginPage("/login")
-                .defaultSuccessUrl("/home", true);
+                    .loginPage("/login")
+                    .defaultSuccessUrl("/home", true)
+                    .passwordParameter("password")
+                    .usernameParameter("username")
+                .and()
+                .rememberMe() //defaults to 2 weeks
+                .and()
+                .logout()
+                    .logoutUrl("/logout")
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID","remember-me")
+                    .logoutSuccessUrl("/login");
+
+
     }
 
     @Override
