@@ -1,10 +1,13 @@
 package com.athena.user;
 
+import com.athena.auth.ApplicationUser;
+import com.athena.auth.ApplicationUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -12,11 +15,12 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class UserManagementController {
 
-    private static final List<User> USERS = new ArrayList<User>();
+    private static final List<User> USERS = Arrays.asList(
+            new User(1, "James Bond"),
+            new User(2, "Maria Jones"),
+            new User(3, "John Doe")
+    );
 
-//        new User(1, "James Bond")
-//        new User(2, "Maria Jones")
-//        new User(3, "John Doe")
     @GetMapping
     @PreAuthorize("hasAuthority('administrator:read')")
     public List<User> getAllUsers(){
