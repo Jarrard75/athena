@@ -10,9 +10,9 @@ import java.util.List;
 public class UserController {
 
     private static final List<User> USERS = Arrays.asList(
-            new User(1, "James Bond"),
-            new User(2, "Maria Jones"),
-            new User(3, "John Doe")
+            new User(1, "James Bond", "user"),
+            new User(2, "Maria Jones", "user"),
+            new User(3, "John Doe", "user")
     );
 
     @GetMapping(path = "{userId}")

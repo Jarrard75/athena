@@ -16,9 +16,9 @@ import java.util.List;
 public class UserManagementController {
 
     private static final List<User> USERS = Arrays.asList(
-            new User(1, "James Bond"),
-            new User(2, "Maria Jones"),
-            new User(3, "John Doe")
+            new User(1, "James Bond", "user"),
+            new User(2, "Maria Jones", "user"),
+            new User(3, "John Doe", "user")
     );
 
     @GetMapping
@@ -50,7 +50,7 @@ public class UserManagementController {
 
     @PutMapping(path = "{userId}")
     @PreAuthorize("hasAuthority('administrator:write')")
-    public void updateStudent(@PathVariable("userId")Integer userId, @RequestBody User user){
+    public void updateStudent(@PathVariable("userId")Integer userId, @RequestBody User user, @RequestBody String password){
 
         User searchUser = USERS.stream()
                 .filter(someUser -> userId.equals(someUser.getUserId()))
@@ -58,8 +58,16 @@ public class UserManagementController {
                 .orElse(null);
 
         if(searchUser != null){
-            User newUser = new User(userId,user.getUserName());
-            USERS.set(USERS.indexOf(searchUser), newUser);
+            if(searchUser.getPassword().equals(password)){
+                User newUser = new User(userId,user.getUserName(), password);
+                USERS.set(USERS.indexOf(searchUser), newUser);
+            }
+            else{
+                throw new RuntimeException("Username/Password Incorrect.");
+            }
+        }
+        else {
+            throw new RuntimeException("User: " + userId + " does not exist.");
         }
     }
 }
